@@ -60,7 +60,9 @@ public class FA {
             String first = transData[0];
             String second = transData[2];
             String symbol = transData[1];
-            Transition temp = new Transition(this.getState(first), symbol, this.getState(second));
+            State firstState = this.getState(first);
+            State secondState = this.getState(second);
+            Transition temp = new Transition(firstState, symbol, secondState);
             // Now that you made the object, attach it to this state
             this.getState(first).addTransition(temp);
         }

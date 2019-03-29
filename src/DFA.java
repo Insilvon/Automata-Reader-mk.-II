@@ -8,7 +8,20 @@ public class DFA extends FA {
         for(String symbol : alphabet) sinkState.addTransition(new Transition(sinkState, symbol, sinkState));
         cleanup();
     }
-    public boolean verify(String input){
+    public void verifyInput(ArrayList<String> values){
+        boolean status;
+        String input = "";
+        System.out.println("=====[DFA RESULTS]=====");
+        for (String value : values) {
+            input = value;
+            status = verify(input);
+            if (status) {
+
+                System.out.println("The string " + input + " has been accepted.");
+            } else System.out.println("The string " + input + " has been rejected.");
+        }
+    }
+    private boolean verify(String input){
         State currentState = this.getStartState();
         for (int i = 0; i<input.length(); i++){
             String symbol = input.charAt(i)+"";

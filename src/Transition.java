@@ -4,13 +4,10 @@ public class Transition {
     private State to;
     private String symbol;
 
-    public Transition(State from, State to, String symbol){
+    public Transition(State from, String symbol, State to){
         this.from = from;
         this.to = to;
         this.symbol = symbol;
-    }
-
-    public Transition(State firstState, String Symbol, State secondState) {
     }
 
     public State getFrom(){
