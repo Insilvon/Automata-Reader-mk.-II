@@ -10,6 +10,9 @@ public class Transition {
         this.symbol = symbol;
     }
 
+    public Transition(State firstState, String Symbol, State secondState) {
+    }
+
     public State getFrom(){
         return this.from;
     }

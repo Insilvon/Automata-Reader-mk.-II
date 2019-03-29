@@ -1,36 +1,43 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
-
 
     static boolean isDFA = true;
 
     public static void main(String[] args) throws FileNotFoundException {
         File fa = new File("./COSC485_P1_DFA.txt");
-        DFA var = parseFA(fa);
         File strings = new File("./COSC485_P1_Strings.txt");
+        File outputFile = new File("./COSC485_P1_Answers.txt");
         ArrayList<String> values = readStrings(strings);
 
-
-        File outputFile = new File("./COSC485_P1_Answers.txt");
-
-        if (isDFA) {
-
-        } else {
-//            var2 = (NFA) temp;
+        boolean dfa = checkFile(fa);
+        if (dfa){
+            DFA var = parseDFA(fa);
+            boolean status;
+            String input = "";
+            for (int i = 0; i<values.size(); i++){
+                input = values.get(i);
+                status = var.verify(input);
+                if(status) System.out.println("The string "+input+" has been accepted.");
+                else System.out.println("The string "+input+" has been rejected.");
+            }
+        }
+        else {
+////            NFA var = parseNFA(fa);
+//            boolean status;
+//            String input = "";
+//            for (int i = 0; i<values.size(); i++){
+//                input = values.get(i);
+//                status = var.verify(input);
+//                if(status) System.out.println("The string "+input+" has been accepted.");
+//                else System.out.println("The string "+input+" has been rejected.");
+//            }
         }
 
-        boolean status;
-        String input = "";
-        for (int i = 0; i<values.size(); i++){
-            input = values.get(i);
-            status = var.verify(input);
-            if(status) System.out.println("The string "+input+" has been accepted.");
-            else System.out.println("The string "+input+" has been rejected.");
-        }
+
+
     }
     private static ArrayList<String> readStrings(File file) throws FileNotFoundException {
         Scanner reader =  new Scanner(file);
@@ -90,12 +97,27 @@ public class Main {
         }
         return value;
     }
+    // Checks if the file is NFA or DFA. True for DFA, false for NFA.
+    private static boolean checkFile(File file){
+        Scanner in = null;
+        try {
+            in = new Scanner(file);
+            while (in.hasNextLine()){
+                String line = in.nextLine();
+                if (line.contains("Relation")) return false;
+            }
+            return true;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return true;
 
+    }
     /**
      * Reads the FA file and sifts out the data it needs
      * @param file file to read
      */
-    private static DFA parseFA(File file){
+    private static DFA parseDFA(File file){
         String[] states = new String[0];
         String[] alphabet = new String[0];
         String startState = "";
@@ -143,7 +165,19 @@ public class Main {
         //Rest of code here.
         if (dfa) isDFA = true;
         else isDFA = false;
-        DFA var = new DFA(transitions, states, alphabet, startState, finalStates, isDFA);
-        return var;
+
+        ArrayList<String> finalStates2 = new ArrayList<String>(Arrays.asList(finalStates));
+        ArrayList<String> alphabet2 = new ArrayList<String>(Arrays.asList(alphabet));
+
+        if (isDFA) {
+            DFA var = new DFA(transitions, states, alphabet2, startState, finalStates2);
+            return var;
+        }
+        return null;
+//        } else {
+//            NFA var = new DFA(transitions, states, alphabet2, startState, finalStates2);
+//        }
+//        FA var = new FA(transitions, states, alphabet2, startState, finalStates2);
+//        return var;
     }
 }
